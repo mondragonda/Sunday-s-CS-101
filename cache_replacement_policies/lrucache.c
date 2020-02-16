@@ -31,11 +31,16 @@ void print_cache_stats(LRUCache cache)
 
 CacheBlock cache_read(LRUCache * cache, char data_to_read)
 {
-	int block_index;
+	int block_index = 1;
 
-	while (block_index < cache->block_count) {
+	while (block_index <= cache->block_count) {
 		if(cache->blocks[block_index].data == data_to_read){
 			cache->hits += 1;
+			printf("\n");
+			printf("Cache block hit\n");
+			printf("Cache block data: %c\n", cache->blocks[block_index].data);
+			printf("Cache block age bit: %d\n", cache->blocks[block_index].age_bit);
+			printf("\n");
 			return cache->blocks[block_index];
 		}
 
@@ -55,9 +60,15 @@ CacheBlock cache_write(LRUCache * cache, char data_to_write)
 
 	cache->blocks = (CacheBlock*) realloc(cache->blocks, (sizeof(cache->blocks) + sizeof(CacheBlock)));
 
-	cache->block_count += 1;
+	cache->block_count = cache->block_count + 1;
 	cache->blocks[cache->block_count] = *new_cache_block;
 	cache->last_age_bit = new_cache_block->age_bit;
+
+	printf("\n");
+	printf("Written cache block\n");
+	printf("Cache block data: %c\n", cache->blocks[cache->block_count].data);
+	printf("Cache block age bit: %d\n", cache->blocks[cache->block_count].age_bit);
+	printf("\n");
 
 	return *new_cache_block;
 }
@@ -68,13 +79,15 @@ int main(int argc, char **argv)
 
 	print_cache_stats(*cache);
 
-	char* cache_max_elements_input = malloc(3*sizeof(char));
+	cache_read(cache, 'D');
 
-	printf("Enter max elements of the cache: ");
-	scanf("%2c", cache_max_elements_input);
+	print_cache_stats(*cache);
+
+	cache_read(cache, 'D');
+
+	print_cache_stats(*cache);
 
 	free(cache);
-	free(cache_max_elements_input);
 
 	return EXIT_SUCCESS;
 }
