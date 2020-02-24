@@ -46,7 +46,7 @@ bool binary_search(int * list, int element)
 	int left = 0, right = LIST_NUMBER_OF_ELEMENTS - 1, mid;
 
 	while(left < right) {
-		mid = (left + right) / 2;
+		mid = floor((left + right) / 2.0);
 		if (element > list[mid]) {
 			left = mid + 1;
 		} else {
